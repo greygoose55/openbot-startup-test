@@ -116,7 +116,9 @@ jobs:
           test "$(docker inspect openbot-test --format '{{.State.ExitCode}}')" = 0
           trap - EXIT
           mkdir -p ../artifacts
-          docker save openbot:startup-test | gzip --fast > ../artifacts/openbot-arm64-startup-test.tar.gz
+          cp docker/Dockerfile ../artifacts/Dockerfile
+          cp docker/seccomp.json ../artifacts/seccomp.json
+          docker image inspect openbot:startup-test --format '{{.Id}}' > ../artifacts/validated-image-id.txt
           cp image/OpenBot.AppImage ../artifacts/
           cd ../artifacts
           sha256sum * > SHA256SUMS.txt
