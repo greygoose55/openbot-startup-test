@@ -53,17 +53,18 @@ jobs:
           df -h .
       - name: Typecheck and synthetic lifecycle regressions
         working-directory: source
+        timeout-minutes: 5
         run: |
           set -euo pipefail
           bun run typecheck:node
-          EXPECT_PATCH=1 bun scripts/or-startup-budget-review.ts
-          bun scripts/or-startup-qualified-review.ts
-          bun scripts/or-pre-spawn-review.ts
-          bun scripts/or-runtime-qualified-review.ts
+          EXPECT_PATCH=1 node_modules/.bin/tsx scripts/or-startup-budget-review.ts
+          node_modules/.bin/tsx scripts/or-startup-qualified-review.ts
+          node_modules/.bin/tsx scripts/or-pre-spawn-review.ts
+          node_modules/.bin/tsx scripts/or-runtime-qualified-review.ts
       - name: Real 120-second silent discovery deadline
         working-directory: source
         timeout-minutes: 4
-        run: REAL_DEADLINE=1 bun scripts/or-startup-budget-review.ts
+        run: REAL_DEADLINE=1 node_modules/.bin/tsx scripts/or-startup-budget-review.ts
       - name: Install exact ARM provider control artifacts
         working-directory: source
         run: |
